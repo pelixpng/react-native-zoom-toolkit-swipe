@@ -29,6 +29,7 @@ export type ResumableZoomProps = Partial<{
   onSwipe: (direction: SwipeDirection) => void;
   onUpdate: (e: CommonZoomState<number>) => void;
   onOverPanning: (x: number, y: number) => void;
+  onSwipeAtBaseZoom?: (offset: { y: number }) => void;
 }> & { children: React.ReactNode } & PanGestureCallbacks &
   PinchGestureCallbacks &
   LongPressCallbacks &

@@ -5,6 +5,7 @@ import Animated, {
   useDerivedValue,
   useSharedValue,
   withTiming,
+  runOnJS,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
@@ -58,6 +59,7 @@ const ResumableZoom: React.FC<ResumableZoomPropsWithRef> = (props) => {
     onPanStart: onUserPanStart,
     onPanEnd: onUserPanEnd,
     onOverPanning,
+    onSwipeAtBaseZoom,
   } = props;
 
   const rootSize = useSizeVector(1, 1);
@@ -169,6 +171,17 @@ const ResumableZoom: React.FC<ResumableZoomPropsWithRef> = (props) => {
     },
   });
 
+  const wrappedOnPanChange = (event: any) => {
+    
+    if (scale.value === minScale && onSwipeAtBaseZoom) {
+      runOnJS(onSwipeAtBaseZoom)({
+      y: event.translationY
+    });
+    }
+
+    onPanChange(event);
+  };
+
   const { onDoubleTapStart, onDoubleTapEnd, enablePanGestureByDoubleTap } =
     useDoubleTapCommons({
       container: extendedSize,
@@ -197,7 +210,7 @@ const ResumableZoom: React.FC<ResumableZoomPropsWithRef> = (props) => {
     .enabled(panEnabled && gesturesEnabled && enablePanGestureByDoubleTap)
     .maxPointers(1)
     .onStart(onPanStart)
-    .onChange(onPanChange)
+    .onChange(wrappedOnPanChange)
     .onEnd(onPanEnd);
 
   const tap = Gesture.Tap()
