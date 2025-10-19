@@ -1,5 +1,5 @@
 {
-  "name": "react-native-zoom-toolkit",
+  "name": "react-native-zoom-toolkit-swipe",
   "version": "5.0.1",
   "description": "Most complete set of pinch to zoom utilites for React Native",
   "main": "lib/commonjs/index",
